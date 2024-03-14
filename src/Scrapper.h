@@ -12,10 +12,14 @@ private:
   static size_t WriteCallback(void *contents, size_t size, size_t nmemb,
                               void *userp);
 
+  static size_t handleHeaders(char *buffer, size_t size, size_t nitems,
+                              std::string *output);
+
 protected:
   CURL *curl;
   CURLcode code;
   struct curl_slist *headers = NULL;
+  string responseHeaders;
 
   string response;
   string token;
