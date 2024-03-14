@@ -1,21 +1,6 @@
 #include "TempMail.h"
-using namespace std;
-using namespace nlohmann;
 
-TempMail::TempMail(string id, string address) {
-
-  this->curl = curl_easy_init();
-
-  curl_easy_setopt(this->curl, CURLOPT_WRITEDATA, &this->response);
-  curl_easy_setopt(this->curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-  curl_easy_setopt(this->curl, CURLOPT_ENCODING, "UTF-8");
-  curl_easy_setopt(this->curl, CURLOPT_ACCEPT_ENCODING, "UTF-8");
-  curl_easy_setopt(this->curl, CURLOPT_TIMEOUT, 15);
-
-  if (!this->curl) {
-    throw "Error al inicializar CURL";
-  }
-
+TempMail::TempMail(string id, string address) : Scrapper() {
   this->setHeaders();
 
   if (id != "" && address != "") {
@@ -46,6 +31,7 @@ bool TempMail::getMessages() {
       string from = message["from"]["address"];
       string subject = message["subject"];
       string body = message["intro"];
+
       this->messages.push_back({id, from, subject, body});
     }
 
@@ -112,8 +98,8 @@ bool TempMail::getNewEmail() {
       this->id = jsonResponse["id"];
 
       cout << "---" << endl
-           << "Email: " << this->email << endl
-           << "ID: " << this->id << endl;
+           << "\033[1;32mEmail: \033[0m" << email << endl
+           << "\033[1;32mID: \033[0m" << id << endl;
 
       this->getToken();
       return true;
@@ -156,7 +142,7 @@ string TempMail::generateRandomAddress() {
   string address;
   string alphabet = "abcdefghijklmnopqrstuvwxyz0123456789%#!";
 
-  for (int i = 0; i < 10; ++i) {
+  for (int i = 0; i < MAIL_LENGHT; ++i) {
     int indiceAleatorio = rand() % alphabet.size();
     address += alphabet[indiceAleatorio];
   }
@@ -193,25 +179,7 @@ void TempMail::setHeaders() {
                               "Content-Type: application/json; charset=UTF-8");
   headers = curl_slist_append(headers, "Origin: https://mail.tm");
 
-  headers = curl_slist_append(headers, this->pickUserAgent().c_str());
-
-  if (this->token != "") {
-    string tokenHeader = "Authorization: Bearer " + this->token;
-    headers = curl_slist_append(headers, tokenHeader.c_str());
-  }
-  curl_easy_setopt(this->curl, CURLOPT_HTTPHEADER, headers);
-}
-
-size_t TempMail::WriteCallback(void *contents, size_t size, size_t nmemb,
-                               void *userp) {
-  ((std::string *)userp)->append((char *)contents, size * nmemb);
-  return size * nmemb;
-}
-
-std::string TempMail::pickUserAgent() {
-
-  int index = rand() % this->userAgents.size();
-  return "User-Agent: " + this->userAgents[index];
+  Scrapper::setHeaders();
 }
 
 void TempMail::waitForRequest() {

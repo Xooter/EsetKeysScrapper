@@ -1,9 +1,10 @@
+#include "src/Eset/Eset.h"
 #include "src/TempMail/TempMail.h"
 
 using namespace std;
 
-vector<TempMail> readTempMailsFromFile(const string &filename) {
-  vector<TempMail> tempMails;
+vector<unique_ptr<TempMail>> readTempMailsFromFile(const string &filename) {
+  vector<unique_ptr<TempMail>> tempMails;
   ifstream file(filename);
 
   cout << "Searching cached mails in file: " << endl << filename << endl;
@@ -19,10 +20,9 @@ vector<TempMail> readTempMailsFromFile(const string &filename) {
 
         cout << "---" << endl
              << "\033[1;31mEmail: \033[0m" << email << endl
-             << "\033[1;31mID: \033[0m" << id << endl
-             << "---" << endl;
+             << "\033[1;31mID: \033[0m" << id << endl;
 
-        tempMails.emplace_back(id, email);
+        tempMails.emplace_back(make_unique<TempMail>(id, email));
       }
     }
     file.close();
@@ -31,12 +31,13 @@ vector<TempMail> readTempMailsFromFile(const string &filename) {
   return tempMails;
 }
 
-void writeTempMailsToFile(const string &filename, vector<TempMail> &tempMails) {
+void writeTempMailsToFile(const string &filename,
+                          vector<unique_ptr<TempMail>> &tempMails) {
   ofstream file(filename);
 
   if (file.is_open()) {
     for (auto &tempMail : tempMails) {
-      file << tempMail.getId() << ":" << tempMail.getEmail() << endl;
+      file << tempMail->getId() << ":" << tempMail->getEmail() << endl;
     }
 
     file.close();
@@ -44,27 +45,34 @@ void writeTempMailsToFile(const string &filename, vector<TempMail> &tempMails) {
 }
 
 int main() {
-  vector<TempMail> existingTempMails =
+  vector<unique_ptr<TempMail>> existingTempMails =
       readTempMailsFromFile(getPath() + "mails.txt");
 
-  int numNewTempMails = 1;
+  int numNewTempMails = 2;
   if (existingTempMails.size() < numNewTempMails) {
     cout << "Creating new temp mails" << endl;
   }
 
   for (int i = existingTempMails.size(); i < numNewTempMails; ++i) {
-    existingTempMails.emplace_back();
-  }
-
-  for (auto &tempMail : existingTempMails) {
-    tempMail.getMessages();
-    for (auto &message : tempMail.messages) {
-      cout << "\033[1;31m--- Message ---\033[0m" << endl;
-      tempMail.readMessage(message.id);
-      message.print();
-    }
+    existingTempMails.emplace_back(make_unique<TempMail>());
   }
 
   writeTempMailsToFile(getPath() + "mails.txt", existingTempMails);
+
+  Eset eset;
+  eset.CreateAccount(existingTempMails[0]->getEmail());
+
+  for (auto &tempMail : existingTempMails) {
+    cout << "\033[1;33m--- " << tempMail->getEmail() << " ---\033[0m" << endl;
+    tempMail->getMessages();
+    cout << "Messages: " << tempMail->messages.size() << endl;
+    for (auto &message : tempMail->messages) {
+      cout << "\033[1;31m--- Message ---\033[0m" << endl;
+      tempMail->readMessage(message.id);
+      message.print();
+      eset.ConfirmRegistration(message.body);
+    }
+  }
+
   return 0;
 }

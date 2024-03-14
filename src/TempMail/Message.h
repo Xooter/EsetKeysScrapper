@@ -1,4 +1,5 @@
 #include "../Proxy.h"
+#include "../Scrapper.h"
 
 struct Message {
   string id;

@@ -1,0 +1,39 @@
+#include "Scrapper.h"
+
+Scrapper::Scrapper() {
+  this->curl = curl_easy_init();
+
+  if (!this->curl) {
+    throw "Error al inicializar CURL";
+  }
+
+  curl_easy_setopt(this->curl, CURLOPT_WRITEDATA, &this->response);
+  curl_easy_setopt(this->curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+  curl_easy_setopt(this->curl, CURLOPT_ENCODING, "UTF-8");
+  curl_easy_setopt(this->curl, CURLOPT_ACCEPT_ENCODING, "UTF-8");
+  curl_easy_setopt(this->curl, CURLOPT_TIMEOUT, 15);
+}
+
+Scrapper::~Scrapper() {}
+
+size_t Scrapper::WriteCallback(void *contents, size_t size, size_t nmemb,
+                               void *userp) {
+  ((std::string *)userp)->append((char *)contents, size * nmemb);
+  return size * nmemb;
+}
+
+std::string Scrapper::pickUserAgent() {
+
+  int index = rand() % this->userAgents.size();
+  return "User-Agent: " + this->userAgents[index];
+}
+
+void Scrapper::setHeaders() {
+  headers = curl_slist_append(headers, this->pickUserAgent().c_str());
+
+  if (this->token != "") {
+    string tokenHeader = "Authorization: Bearer " + this->token;
+    headers = curl_slist_append(headers, tokenHeader.c_str());
+  }
+  curl_easy_setopt(this->curl, CURLOPT_HTTPHEADER, headers);
+}
