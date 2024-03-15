@@ -18,7 +18,7 @@ Scrapper::Scrapper() {
   curl_easy_setopt(this->curl, CURLOPT_TIMEOUT, 15);
 }
 
-Scrapper::~Scrapper() {}
+Scrapper::~Scrapper() { curl_easy_cleanup(this->curl); }
 
 size_t Scrapper::WriteCallback(void *contents, size_t size, size_t nmemb,
                                void *userp) {

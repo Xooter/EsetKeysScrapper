@@ -60,8 +60,10 @@ int main() {
   writeTempMailsToFile(getPath() + "mails.txt", existingTempMails);
 
   Eset eset;
-  eset.CreateAccount(existingTempMails[0]->getEmail());
 
+  /* eset.CreateAccount(existingTempMails[0]->getEmail()); */
+
+  /*
   for (auto &tempMail : existingTempMails) {
     cout << "\033[1;33m--- " << tempMail->getEmail() << " ---\033[0m" << endl;
     tempMail->getMessages();
@@ -73,6 +75,8 @@ int main() {
       eset.ConfirmRegistration(message.body);
     }
   }
+*/
+  eset.GetLicense();
 
   return 0;
 }
