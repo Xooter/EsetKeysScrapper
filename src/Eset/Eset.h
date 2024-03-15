@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Scrapper.h"
+#include "Pkce.h"
 
 inline const string ESET_PASSWORD = "rula123123123R";
 
@@ -21,6 +22,8 @@ public:
   bool GetLicense();
 
 private:
+  Pkce pkce;
+
   string getVerificationLink(string body);
   void setHeaders();
 
@@ -28,7 +31,7 @@ private:
   string getParameterValue(const std::string &url,
                            const std::string &parameter);
 
-  bool getAccessToken(string code, string code_verifier);
+  bool getAccessToken(string code);
   string getPKCEResponse(string response);
   bool login();
   bool activateLicense();

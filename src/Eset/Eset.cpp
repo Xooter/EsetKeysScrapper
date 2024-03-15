@@ -135,11 +135,6 @@ bool Eset::activateLicense() {
 bool Eset::login() {
   this->response.clear();
 
-  const string randomString = Crypto::generateRandomString();
-  const string state = Crypto::generateRandomString(32, false);
-  const string code_verifier = Crypto::base64_url_encode(randomString);
-  const string code_challenge = Crypto::sha256_base64url(code_verifier);
-
   const string hardcodedJson =
       "{\"email\":\"qke9m1jf4k5w#@yogirt.com\",\"password\":"
       "\"" +
@@ -148,10 +143,10 @@ bool Eset::login() {
       "callback?client_id=myeset&redirect_uri=https://home.eset.com/"
       "callback&response_type=code&scope=openid mecac "
       "myesetapi&state=" +
-      state +
+      pkce.getState() +
       "&code_"
       "challenge=" +
-      code_challenge +
+      pkce.getCodeChallenge() +
       "&code_"
       "challenge_method=S256&response_mode=query\","
       "\"browserFingerprint\":\"cb8dbe7a3b8f850232bbcf15f8c6e004\"}";
@@ -170,7 +165,7 @@ bool Eset::login() {
     const string authLocation = getAuthLocation(this->responseHeaders);
     const string code = getParameterValue(authLocation, "code");
 
-    getAccessToken(code, code_verifier);
+    getAccessToken(code);
 
     return true;
   }
@@ -203,13 +198,13 @@ string Eset::getPKCEResponse(string response) {
   return this->responseHeaders;
 }
 
-bool Eset::getAccessToken(string code, string code_verifier) {
+bool Eset::getAccessToken(string code) {
   this->response.clear();
 
   const string tokenBody =
       "client_id=myeset&code=" + code +
       "&redirect_uri=https%3A%2F%2Fhome.eset.com%2Fcallback&code_verifier=" +
-      code_verifier + "&grant_type=authorization_code";
+      pkce.getCodeVerifier() + "&grant_type=authorization_code";
 
   curl_easy_setopt(this->curl, CURLOPT_URL, TOKEN.c_str());
   curl_easy_setopt(this->curl, CURLOPT_POST, 1L);
