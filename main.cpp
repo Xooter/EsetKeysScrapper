@@ -1,5 +1,7 @@
 #include "src/Eset/Eset.h"
 #include "src/TempMail/TempMail.h"
+#include <chrono>
+#include <thread>
 
 using namespace std;
 
@@ -61,9 +63,10 @@ int main() {
 
   Eset eset;
 
-  /* eset.CreateAccount(existingTempMails[0]->getEmail()); */
+  eset.CreateAccount(existingTempMails[0]->getEmail());
 
-  /*
+  this_thread::sleep_for(chrono::milliseconds(5000));
+
   for (auto &tempMail : existingTempMails) {
     cout << "\033[1;33m--- " << tempMail->getEmail() << " ---\033[0m" << endl;
     tempMail->getMessages();
@@ -75,7 +78,6 @@ int main() {
       eset.ConfirmRegistration(message.body);
     }
   }
-*/
   eset.GetLicense();
 
   return 0;

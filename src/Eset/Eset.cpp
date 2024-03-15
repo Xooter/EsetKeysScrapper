@@ -2,11 +2,10 @@
 #include <curl/curl.h>
 
 Eset::Eset() : Scrapper() {
-  // temporal
-  const string url = getPath() + "cookies.txt";
+
+  const string url = getPath() + "eset_cookies.txt";
   curl_easy_setopt(curl, CURLOPT_COOKIEJAR, url.c_str());
   curl_easy_setopt(curl, CURLOPT_COOKIEFILE, url.c_str());
-  //
 
   this->setHeaders();
 }
