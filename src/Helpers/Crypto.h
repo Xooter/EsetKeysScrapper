@@ -1,4 +1,5 @@
 #pragma once
+#include "../../dependencies/colors.h"
 #include "../../dependencies/json.hpp"
 #include "curl/curl.h"
 

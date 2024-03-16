@@ -1,7 +1,6 @@
 #include "src/Eset/Eset.h"
 #include "src/TempMail/TempMail.h"
 #include <chrono>
-#include <thread>
 
 using namespace std;
 
@@ -50,9 +49,9 @@ int main() {
   vector<unique_ptr<TempMail>> existingTempMails =
       readTempMailsFromFile(getPath() + "mails.txt");
 
-  int numNewTempMails = 2;
+  int numNewTempMails = 1;
   if (existingTempMails.size() < numNewTempMails) {
-    cout << "Creating new temp mails" << endl;
+    cout << "Creating new temp mails..." << endl;
   }
 
   for (int i = existingTempMails.size(); i < numNewTempMails; ++i) {
@@ -61,23 +60,32 @@ int main() {
 
   writeTempMailsToFile(getPath() + "mails.txt", existingTempMails);
 
-  Eset eset;
+  Eset eset(existingTempMails[0]->getEmail());
 
-  eset.CreateAccount(existingTempMails[0]->getEmail());
+  eset.CreateAccount();
+  this_thread::sleep_for(chrono::milliseconds(100));
 
-  this_thread::sleep_for(chrono::milliseconds(5000));
+  bool activated = false;
 
-  for (auto &tempMail : existingTempMails) {
-    cout << "\033[1;33m--- " << tempMail->getEmail() << " ---\033[0m" << endl;
-    tempMail->getMessages();
-    cout << "Messages: " << tempMail->messages.size() << endl;
-    for (auto &message : tempMail->messages) {
-      cout << "\033[1;31m--- Message ---\033[0m" << endl;
-      tempMail->readMessage(message.id);
-      message.print();
-      eset.ConfirmRegistration(message.body);
+  while (!activated) {
+    for (auto &tempMail : existingTempMails) {
+      cout << YELLOW << tempMail->getEmail() << endl;
+      tempMail->getMessages();
+      cout << "Messages: " << tempMail->messages.size() << endl;
+      for (auto &message : tempMail->messages) {
+        if (message.from == "info@product.eset.com" &&
+            message.subject == "Account confirmation") {
+          tempMail->readMessage(message.id);
+          if (eset.ConfirmRegistration(message.body)) {
+            activated = true;
+            break;
+          }
+          this_thread::sleep_for(chrono::milliseconds(200));
+        }
+      }
     }
   }
+
   eset.GetLicense();
 
   return 0;
