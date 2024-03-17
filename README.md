@@ -96,7 +96,7 @@ To get started with EsetKeysScrapper, follow these steps:
 ### Installation
 
 - Clone the repository to your local machine:
-- `git clone https://github.com/yourusername/EsetKeysScrapper.git`
+- `git clone https://github.com/Xooter/EsetKeysScrapper.git`
 - Navigate to the project directory:
 - `cd EsetKeysScrapper`
 - Create a build directory and navigate into it:
