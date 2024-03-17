@@ -24,6 +24,8 @@ public:
   bool ConfirmRegistration(string body);
   bool GetLicense();
 
+  string license = "";
+
 private:
   Pkce pkce;
 

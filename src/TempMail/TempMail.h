@@ -20,13 +20,12 @@ inline const int WAIT_FOR_REQUEST = 500; // milliseconds
 
 inline const string EXISTING_ADDRESSES_FILE = "existing_addresses.txt";
 inline const string PASSWORD = "EsetKeys";
-inline const int MAIL_LENGHT = 13;
 
 class TempMail : public Scrapper {
 public:
   vector<Message> messages;
 
-  TempMail(string id = "", string address = "");
+  TempMail(int mailLenght);
   ~TempMail();
 
   bool getNewEmail();
@@ -40,6 +39,7 @@ private:
   string email;
   string id;
   string password = PASSWORD;
+  int mailLenght = 15;
 
   void setHeaders() override;
 

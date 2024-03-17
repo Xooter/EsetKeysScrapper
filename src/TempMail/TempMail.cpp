@@ -1,14 +1,9 @@
 #include "TempMail.h"
 
-TempMail::TempMail(string id, string address) : Scrapper() {
+TempMail::TempMail(int mailLenght) : Scrapper() {
   this->setHeaders();
 
-  if (id != "" && address != "") {
-    this->id = id;
-    this->email = address;
-    if (this->getToken())
-      return;
-  }
+  this->mailLenght = mailLenght;
 
   this->getNewEmail();
 }
@@ -97,9 +92,9 @@ bool TempMail::getNewEmail() {
       this->email = jsonResponse["address"];
       this->id = jsonResponse["id"];
 
-      cout << "---" << endl
-           << "\033[1;32mEmail: \033[0m" << email << endl
-           << "\033[1;32mID: \033[0m" << id << endl;
+      cout << YELLOW << "--- TEMP MAIL CREATED ---" << endl
+           << GREEN << "Email: " << RESET << email << endl
+           << GREEN << "ID: " << RESET << id << endl;
 
       this->getToken();
       return true;
@@ -142,7 +137,7 @@ string TempMail::generateRandomAddress() {
   string address;
   string alphabet = "abcdefghijklmnopqrstuvwxyz0123456789%#!";
 
-  for (int i = 0; i < MAIL_LENGHT; ++i) {
+  for (int i = 0; i < this->mailLenght; ++i) {
     int indiceAleatorio = rand() % alphabet.size();
     address += alphabet[indiceAleatorio];
   }
