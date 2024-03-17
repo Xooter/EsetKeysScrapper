@@ -30,7 +30,6 @@
 <br />
 <div align="center">
 
-
   <h3 align="center">EsetKeysScrapper</h3>
 
   <p align="center">
@@ -74,7 +73,9 @@
 $${\color{red}DISCLAIMER}$$
 
 ```diff
--EsetKeysScrapper is intended for educational and research purposes only. The developers assume no responsibility for any misuse or illegal activities conducted with this tool. Users are advised to comply with all relevant laws and ethical guidelines when using this software-
+-EsetKeysScrapper is intended for educational and research purposes only.
+-The developers assume no responsibility for any misuse or illegal activities conducted with this tool.
+-Users are advised to comply with all relevant laws and ethical guidelines when using this software
 ```
 
 ---
