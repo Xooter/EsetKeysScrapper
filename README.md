@@ -72,11 +72,7 @@
 
 $${\color{red}DISCLAIMER}$$
 
-```diff
--EsetKeysScrapper is intended for educational and research purposes only.
--The developers assume no responsibility for any misuse or illegal activities conducted with this tool.
--Users are advised to comply with all relevant laws and ethical guidelines when using this software
-```
+> EsetKeysScrapper is intended for educational and research purposes only.The developers assume no responsibility for any misuse or illegal activities conducted with this tool.Users are advised to comply with all relevant laws and ethical guidelines when using this software
 
 ---
 
@@ -108,7 +104,7 @@ To get started with EsetKeysScrapper, follow these steps:
 - Generate build files using CMake:
 - `cmake ..`
 - Build the project:
-  `cmake --build .`
+- `cmake --build .`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
