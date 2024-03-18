@@ -10,6 +10,8 @@ public:
 
   void generateLicenses();
 
+  void showAllLicenses();
+
 private:
   int numLicenses = 1;
   int domainLenght = 15;

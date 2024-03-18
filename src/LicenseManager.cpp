@@ -83,3 +83,11 @@ void LicenseManager::saveGeneratedData(const string &filename) {
     file.close();
   }
 }
+
+void LicenseManager::showAllLicenses() {
+  for (auto &license : licenses) {
+    cout << "Mail: " << license.mail << endl;
+    cout << "License: " << license.license << endl;
+    cout << endl;
+  }
+}

@@ -62,6 +62,9 @@ int main(int argc, char *argv[]) {
 
     licenseManager.generateLicenses();
 
+    cout << GREEN << "Licenses generated successfully" << RESET << endl;
+    licenseManager.showAllLicenses();
+
   } catch (const bad_exception &e) {
     cout << "Error parsing options: " << e.what() << std::endl;
     return 1;
