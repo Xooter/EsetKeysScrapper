@@ -3,9 +3,7 @@
 
 #define version "1.1"
 
-
 int main(int argc, char *argv[]) {
-
 
   cout << CYAN << R"(
   ______          _   _  __               _____                                      
@@ -54,6 +52,11 @@ int main(int argc, char *argv[]) {
             "use of this tool."
          << RESET << endl;
     cout << GREEN << "\tXooter." << RESET << endl << endl;
+
+    numLicenses = numLicenses < 1 ? 1 : numLicenses;
+
+    domainLenght = domainLenght > 25 ? 25 : domainLenght;
+    domainLenght = domainLenght < 5 ? 5 : domainLenght;
 
     LicenseManager licenseManager(numLicenses, domainLenght);
 
