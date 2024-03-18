@@ -62,7 +62,8 @@ int main(int argc, char *argv[]) {
 
     licenseManager.generateLicenses();
 
-    cout << GREEN << "Licenses generated successfully" << RESET << endl;
+    cout << endl << GREEN << "---" << RESET << endl;
+    cout << GREEN << "Licenses generated successfully" << RESET << endl << endl;
     licenseManager.showAllLicenses();
 
   } catch (const bad_exception &e) {
