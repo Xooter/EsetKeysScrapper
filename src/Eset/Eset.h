@@ -25,11 +25,10 @@ public:
   bool GetLicense();
 
   string license = "";
+  string mail;
 
 private:
   Pkce pkce;
-
-  string mail;
 
   string getVerificationLink(string body);
   void setHeaders(bool create_account = false, bool hasLenght = true);

@@ -1,30 +1,11 @@
 #include "dependencies/cxxopts.hpp"
-#include "src/Eset/Eset.h"
-#include "src/TempMail/TempMail.h"
-#include <exception>
+#include "src/LicenseManager.h"
 
-#define version "1.0"
+#define version "1.1"
 
-using namespace std;
-
-void saveGeneratedData(const string &filename,
-                       vector<unique_ptr<TempMail>> &tempMails,
-                       vector<string> &licenses) {
-  ofstream file(filename);
-
-  if (file.is_open()) {
-    for (int i = 0; i < tempMails.size(); i++) {
-      file << tempMails[i]->getEmail() << "," << licenses[i] << endl;
-    }
-
-    file.close();
-  }
-}
-
-vector<unique_ptr<TempMail>> tempMails;
-vector<string> licenses;
 
 int main(int argc, char *argv[]) {
+
 
   cout << CYAN << R"(
   ______          _   _  __               _____                                      
@@ -74,44 +55,9 @@ int main(int argc, char *argv[]) {
          << RESET << endl;
     cout << GREEN << "\tXooter." << RESET << endl << endl;
 
-    for (int i = tempMails.size(); i < numLicenses; ++i) {
-      tempMails.emplace_back(make_unique<TempMail>(domainLenght));
-    }
+    LicenseManager licenseManager(numLicenses, domainLenght);
 
-    for (auto &tempMail : tempMails) {
-      Eset eset(tempMail->getEmail());
-
-      eset.CreateAccount();
-      this_thread::sleep_for(chrono::milliseconds(100));
-
-      bool activated = false;
-
-      cout << endl << YELLOW << "Waiting to verification code" << endl;
-
-      do {
-        tempMail->getMessages();
-        for (auto &message : tempMail->messages) {
-          if (message.from == "info@product.eset.com" &&
-              message.subject == "Account confirmation") {
-            tempMail->readMessage(message.id);
-            if (eset.ConfirmRegistration(message.body)) {
-              activated = true;
-            }
-            this_thread::sleep_for(chrono::milliseconds(100));
-          }
-        }
-      } while (!activated);
-
-      int attempts = 0;
-      while (!eset.GetLicense() && attempts < 5) {
-        cout << YELLOW << "Retrying to get license" << endl;
-        attempts++;
-      }
-
-      licenses.push_back(eset.license);
-    }
-
-    saveGeneratedData(getPath() + "data.csv", tempMails, licenses);
+    licenseManager.generateLicenses();
 
   } catch (const bad_exception &e) {
     cout << "Error parsing options: " << e.what() << std::endl;
