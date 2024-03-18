@@ -140,7 +140,9 @@ EsetKeys -n 3 -l 20
 
 ## Roadmap
 
+- [ ] Proxy Support
 - [ ] More Antivirus
+- [ ] Update Checker
 - [ ] Better Menu (conio.h)
 - [ ] Muur Configurations
 - [ ] Multi-language Support
