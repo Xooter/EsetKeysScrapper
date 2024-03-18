@@ -1,5 +1,4 @@
 #include "LicenseManager.h"
-#include "TempMail/TempMail.h"
 
 LicenseManager::LicenseManager(int numLicenses, int domainLenght) {
   this->numLicenses = numLicenses;

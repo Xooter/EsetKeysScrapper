@@ -1,9 +1,3 @@
-The LICENSE.TXT file for your project can typically be found at the root directory of your project's repository. If you haven't created one yet, you can create a new file named LICENSE.TXT in your project's root directory and paste the text of the MIT License into it.
-
-Here's the text of the MIT License for your convenience:
-
-sql
-
 MIT License
 
 Copyright (c) 2024 Joaquin Righetti
