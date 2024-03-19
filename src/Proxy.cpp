@@ -15,8 +15,8 @@ void Proxy::changeProxy(string proxy) {
       this->port = stoi(proxy.substr(port_start));
     }
   } else {
-    cout << RED << "Error al inicializar proxy: " << YELLOW << proxy << RESET
-         << endl;
+    cout << RED << " Error al inicializar proxy: " << YELLOW << proxy
+         << RESET << endl;
   }
 }
 

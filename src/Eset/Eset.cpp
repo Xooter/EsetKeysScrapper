@@ -54,8 +54,8 @@ bool Eset::CreateAccount() {
   if (this->code == CURLE_OK && !this->response.empty()) {
     cout << endl
          << YELLOW << "--- ESSET ACCOUNT CREATED ---" << endl
-         << GREEN << "Email: " << RESET << this->mail << endl
-         << GREEN << "Password: " << RESET << ESET_PASSWORD << endl;
+         << GREEN << " Email: " << RESET << this->mail << endl
+         << GREEN << "󰟵 Password: " << RESET << ESET_PASSWORD << endl;
 
     this->setHeaders(false);
     return true;
@@ -77,12 +77,12 @@ bool Eset::ConfirmRegistration(string body) {
   this->code = curl_easy_perform(this->curl);
 
   if (this->response.find("We are sorry") != string::npos) {
-    cout << RED << "Verification Failed" << endl << "Retrying..." << endl;
+    cout << RED << " Verification Failed" << endl << "Retrying..." << endl;
     return false;
   }
 
   if (this->code == CURLE_OK) {
-    cout << GREEN << "Verification Successful" << endl << endl;
+    cout << GREEN << " Verification Successful" << endl << endl;
     return true;
   }
   return false;
@@ -104,16 +104,16 @@ string Eset::getVerificationLink(string body) {
 bool Eset::GetLicense() {
   if (this->token == "") {
     if (this->login())
-      cout << GREEN << "Logged in" << endl;
+      cout << GREEN << " Logged in" << RESET << endl;
     else {
-      cout << RED << "Login failed" << endl;
+      cout << RED << " Login failed" << RESET << endl;
       return false;
     }
   }
   this_thread::sleep_for(chrono::milliseconds(100));
 
   if (!activateLicense()) {
-    cout << RED << "Error activating license" << endl;
+    cout << RED << " Error activating license" << endl;
     return false;
   }
 
@@ -134,7 +134,7 @@ bool Eset::GetLicense() {
   this->code = curl_easy_perform(this->curl);
 
   if (this->response.length() == 2) {
-    cout << RED << "No license found" << endl;
+    cout << RED << " No license found" << endl;
     return false;
   }
 
@@ -143,7 +143,7 @@ bool Eset::GetLicense() {
 
     string license = jsonResponse[0]["licenseKey"];
 
-    cout << GREEN << "License: " << RESET << license << endl;
+    cout << GREEN << "󰌆 License: " << RESET << license << endl;
     this->license = license;
     return true;
   }
@@ -201,11 +201,11 @@ bool Eset::login() {
     const json jsonResponse = json::parse(this->response);
 
     if (jsonResponse["result"] == 1) {
-      cout << RED << "Account does not exist" << endl;
+      cout << RED << " Account does not exist" << RESET << endl;
       return false;
     } else if (this->response.find("\"https://home.eset.com\"") !=
                string::npos) {
-      cout << RED << "Error in PKCE callback" << endl;
+      cout << RED << " Error in PKCE callback" << RESET << endl;
       return false;
     }
 
@@ -215,7 +215,7 @@ bool Eset::login() {
     const string code = getParameterValue(authLocation, "code");
 
     if (!getAccessToken(code)) {
-      cout << RED << "Error getting JWT token" << endl;
+      cout << RED << " Error getting JWT token" << RESET << endl;
       return false;
     }
 

@@ -23,7 +23,7 @@ void LicenseManager::generateLicenses() {
   if (useProxies) {
 
     cout << endl << YELLOW << "--- Using proxies ---" << endl;
-    cout << "This can take a while depending on the latency of the proxy"
+    cout << " This can take a while depending on the latency of the proxy"
          << endl
          << "--- ---" << endl;
   }
@@ -41,7 +41,7 @@ void LicenseManager::generateLicenses() {
 
     int attempts_creating_account = 0;
     while (!eset.CreateAccount() && attempts_creating_account < 5) {
-      cout << YELLOW << "Retrying to create account..." << endl;
+      cout << YELLOW << "󰑓 Retrying to create account..." << RESET << endl;
       attempts_creating_account++;
     }
 
@@ -58,7 +58,7 @@ void LicenseManager::generateLicenses() {
 
     int attempts = 0;
     while (!eset.GetLicense() && attempts < 5) {
-      cout << YELLOW << "Retrying to get license..." << endl;
+      cout << YELLOW << "󰑓 Retrying to get license..." << endl;
       attempts++;
     }
 
@@ -122,8 +122,8 @@ void LicenseManager::saveGeneratedData(const string &filename) {
 
 void LicenseManager::showAllLicenses() {
   for (auto &license : licenses) {
-    cout << GREEN << "Mail: " << RESET << license.mail << endl;
-    cout << GREEN << "License: " << RESET << license.license << endl;
+    cout << GREEN << " Mail: " << RESET << license.mail << endl;
+    cout << GREEN << "󰌆 License: " << RESET << license.license << endl;
     cout << endl;
   }
 }

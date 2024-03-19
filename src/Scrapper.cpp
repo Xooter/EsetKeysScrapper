@@ -4,7 +4,7 @@ Scrapper::Scrapper() {
   this->curl = curl_easy_init();
 
   if (!this->curl) {
-    throw "Error al inicializar CURL";
+    throw " Error al inicializar CURL";
   }
 
   curl_easy_setopt(this->curl, CURLOPT_WRITEDATA, &this->response);

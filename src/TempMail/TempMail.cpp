@@ -92,8 +92,8 @@ bool TempMail::getNewEmail() {
       this->id = jsonResponse["id"];
 
       cout << YELLOW << "--- TEMP MAIL CREATED ---" << endl
-           << GREEN << "Email: " << RESET << email << endl
-           << GREEN << "ID: " << RESET << id << endl;
+           << GREEN << " Email: " << RESET << email << endl
+           << GREEN << "󰮔 ID: " << RESET << id << endl;
 
       this->getToken();
       return true;

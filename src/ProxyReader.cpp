@@ -7,7 +7,8 @@ void ProxyReader::readProxies(string path) {
   ifstream file(path);
 
   if (!file.is_open()) {
-    cerr << RED << "Failed to open file: " << YELLOW << path << RESET << endl;
+    cerr << RED << " Failed to open file: " << YELLOW << path << RESET
+         << endl;
   }
 
   string line;
