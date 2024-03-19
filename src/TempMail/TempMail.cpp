@@ -63,8 +63,6 @@ Message TempMail::readMessage(string id) {
 bool TempMail::getNewEmail() {
   this->response.clear();
 
-  curl_easy_setopt(this->curl, CURLOPT_URL, CREATE_MAIL.c_str());
-
   string address;
   address = generateRandomAddress();
 
@@ -72,8 +70,9 @@ bool TempMail::getNewEmail() {
 
   string jsonBody = postData.dump();
 
-  curl_easy_setopt(curl, CURLOPT_POST, 1L);
-  curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonBody.c_str());
+  curl_easy_setopt(this->curl, CURLOPT_URL, CREATE_MAIL.c_str());
+  curl_easy_setopt(this->curl, CURLOPT_POSTFIELDS, jsonBody.c_str());
+  curl_easy_setopt(this->curl, CURLOPT_POST, 1L);
 
   this->code = curl_easy_perform(this->curl);
 
@@ -136,13 +135,14 @@ bool TempMail::getToken() {
 string TempMail::generateRandomAddress() {
   string address;
   string alphabet = "abcdefghijklmnopqrstuvwxyz0123456789%#!";
+  srand(time(0));
 
   for (int i = 0; i < this->mailLenght; ++i) {
     int indiceAleatorio = rand() % alphabet.size();
     address += alphabet[indiceAleatorio];
   }
 
-  address = address + "@yogirt.com";
+  address = address + getValidDomain();
 
   if (isExistingAddress(address)) {
     return generateRandomAddress();
@@ -150,11 +150,33 @@ string TempMail::generateRandomAddress() {
   return address;
 }
 
+string TempMail::getValidDomain() {
+
+  curl_easy_setopt(this->curl, CURLOPT_URL, GET_DOMAINS.c_str());
+  curl_easy_setopt(this->curl, CURLOPT_HTTPGET, 1L);
+
+  this->code = curl_easy_perform(this->curl);
+  curl_easy_setopt(this->curl, CURLOPT_HTTPGET, 0L);
+  this->responseHeaders.clear();
+
+  if (this->code == CURLE_OK &
+      this->response.find("domain") != std::string::npos) {
+    json jsonResponse = json::parse(this->response);
+    string domain = jsonResponse[0]["domain"];
+    this->response.clear();
+
+    domain = "@" + domain;
+    return domain;
+  }
+
+  return "";
+}
+
 bool TempMail::isExistingAddress(const std::string &address) {
   ifstream existingAddressesFile(getPath() + EXISTING_ADDRESSES_FILE);
   string line;
 
-  while (std::getline(existingAddressesFile, line)) {
+  while (getline(existingAddressesFile, line)) {
     if (line == address) {
       return true;
     }

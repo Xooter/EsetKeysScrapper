@@ -41,6 +41,8 @@ private:
   string password = PASSWORD;
   int mailLenght = 15;
 
+  string getValidDomain();
+
   void setHeaders() override;
 
   bool getToken();
