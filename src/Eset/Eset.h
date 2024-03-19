@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../Proxy.h"
 #include "../Scrapper.h"
 #include "Pkce.h"
 
@@ -17,7 +18,7 @@ inline const string GET_All = "https://home.eset.com/api/License/GetAll";
 
 class Eset : public Scrapper {
 public:
-  Eset(string mail);
+  Eset(string mail, Proxy *proxy = nullptr);
   ~Eset();
 
   bool CreateAccount();
@@ -28,6 +29,8 @@ public:
   string mail;
 
 private:
+  Proxy *proxy;
+
   Pkce pkce;
 
   string getVerificationLink(string body);

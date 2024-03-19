@@ -1,8 +1,17 @@
 #include "LicenseManager.h"
 
-LicenseManager::LicenseManager(int numLicenses, int domainLenght) {
+LicenseManager::LicenseManager(int numLicenses, int domainLenght,
+                               string proxyFile) {
   this->numLicenses = numLicenses;
   this->domainLenght = domainLenght;
+  if (!proxyFile.empty()) {
+    cout << GREEN << "---" << RESET << endl;
+    cout << GREEN << "Loading proxies file..." << RESET << endl;
+    cout << YELLOW << proxyFile << RESET << endl;
+    cout << GREEN << "---" << RESET << endl << endl;
+    this->proxyReader.readProxies(proxyFile);
+    this->useProxies = true;
+  }
 }
 
 LicenseManager::~LicenseManager() {}
@@ -11,20 +20,51 @@ void LicenseManager::generateLicenses() {
 
   this->generateTempMails();
 
-  for (auto &tempMail : tempMails) {
-    Eset eset(tempMail->getEmail());
+  if (useProxies) {
 
-    eset.CreateAccount();
+    cout << endl << YELLOW << "--- Using proxies ---" << endl;
+    cout << "This can take a while depending on the latency of the proxy"
+         << endl
+         << "--- ---" << endl;
+  }
+
+  for (auto &tempMail : tempMails) {
+
+    Proxy proxy("http://127.0.0.1:80");
+    if (useProxies) {
+      do {
+        proxy = this->proxyReader.giveNext();
+      } while (proxy.isWorking());
+    }
+
+    Eset eset(tempMail->getEmail(), useProxies ? &proxy : nullptr);
+
+    int attempts_creating_account = 0;
+    while (!eset.CreateAccount() && attempts_creating_account < 5) {
+      cout << YELLOW << "Retrying to create account..." << endl;
+      attempts_creating_account++;
+    }
+
+    if (attempts_creating_account > 5) {
+      cout << RED << " Error creating account" << RESET << endl;
+      continue;
+    }
+
     this_thread::sleep_for(chrono::milliseconds(100));
 
-    cout << endl << YELLOW << "Waiting to verification code" << endl;
+    cout << endl << YELLOW << " Waiting to verification code..." << endl;
 
     this->waitForAccountActivation(tempMail, eset);
 
     int attempts = 0;
     while (!eset.GetLicense() && attempts < 5) {
-      cout << YELLOW << "Retrying to get license" << endl;
+      cout << YELLOW << "Retrying to get license..." << endl;
       attempts++;
+    }
+
+    if (attempts > 5) {
+      cout << RED << " Error getting license" << RESET << endl;
+      continue;
     }
 
     licenses.push_back(eset);
@@ -67,15 +107,12 @@ void LicenseManager::generateTempMails() {
 }
 
 void LicenseManager::saveGeneratedData(const string &filename) {
-  if (this->tempMails.size() != this->licenses.size()) {
-    cout << RED << "Error: The number of tempMails and licenses is different"
-         << RESET << endl;
-  }
-
   ofstream file(filename);
 
   if (file.is_open()) {
     for (int i = 0; i < this->licenses.size(); i++) {
+      if (licenses[i].license != "" || licenses[i].mail != "")
+        continue;
       file << this->licenses[i].mail << "," << licenses[i].license << endl;
     }
 

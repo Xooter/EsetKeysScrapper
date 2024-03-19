@@ -1,11 +1,12 @@
 #pragma once
 
 #include "Eset/Eset.h"
+#include "ProxyReader.h"
 #include "TempMail/TempMail.h"
 
 class LicenseManager {
 public:
-  LicenseManager(int numLicenses, int domainLenght);
+  LicenseManager(int numLicenses, int domainLenght, string proxyFile);
   ~LicenseManager();
 
   void generateLicenses();
@@ -15,6 +16,9 @@ public:
 private:
   int numLicenses = 1;
   int domainLenght = 15;
+
+  ProxyReader proxyReader;
+  bool useProxies = false;
 
   vector<unique_ptr<TempMail>> tempMails;
   vector<Eset> licenses;

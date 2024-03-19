@@ -4,7 +4,8 @@
 
 class Proxy {
 public:
-  std::string ip;
+  string protocol;
+  string ip;
   int port;
 
   Proxy(std::string proxy);
@@ -13,10 +14,10 @@ public:
   void changeProxy(std::string proxy);
   bool isWorking();
 
-  std::string toString();
+  string toString();
 
 private:
-  std::string buffer;
+  string buffer;
 
   static size_t WriteCallback(void *contents, size_t size, size_t nmemb,
                               void *userp);

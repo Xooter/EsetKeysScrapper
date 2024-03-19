@@ -1,13 +1,29 @@
 #include "Eset.h"
-#include <curl/curl.h>
 
-Eset::Eset(string mail) : Scrapper() {
-
+Eset::Eset(string mail, Proxy *proxy) : Scrapper() {
+  this->proxy = proxy;
   this->mail = mail;
 
   const string url = getPath() + "eset_cookies.txt";
   curl_easy_setopt(curl, CURLOPT_COOKIEJAR, url.c_str());
   curl_easy_setopt(curl, CURLOPT_COOKIEFILE, url.c_str());
+
+  if (proxy != nullptr) {
+
+    cout << endl
+         << GREEN << "Using Proxy: " << YELLOW << proxy->toString() << RESET
+         << endl;
+
+    curl_easy_setopt(this->curl, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
+    if (proxy->protocol == "socks5") {
+      curl_easy_setopt(this->curl, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+    } else if (proxy->protocol == "socks4") {
+      curl_easy_setopt(this->curl, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS4);
+    }
+
+    curl_easy_setopt(this->curl, CURLOPT_PROXY, this->proxy->ip.c_str());
+    curl_easy_setopt(this->curl, CURLOPT_PROXYPORT, this->proxy->port);
+  }
 
   this->setHeaders();
 }

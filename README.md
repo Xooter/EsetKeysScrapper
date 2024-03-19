@@ -140,7 +140,7 @@ EsetKeys -n 3 -l 20
 
 ## Roadmap
 
-- [ ] Proxy Support
+- [x] Proxy Support
 - [ ] More Antivirus
 - [ ] Update Checker
 - [ ] Better Menu (conio.h)

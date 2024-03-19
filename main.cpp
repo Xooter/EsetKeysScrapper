@@ -24,13 +24,16 @@ int main(int argc, char *argv[]) {
                            "NOD32 antivirus accounts through web scraping");
 
   int numLicenses = 1;
-  int domainLenght = 15;
+  int domainLenght = 10;
+  string proxyFile = "";
 
   options.add_options()("h,help", "Show help")("v,version", "Show version")(
       "n,number", "Number of licenses",
       cxxopts::value<int>(numLicenses)->default_value("1"))(
       "l,length", "Domain lenght for temporal mails",
-      cxxopts::value<int>(domainLenght)->default_value("15"));
+      cxxopts::value<int>(domainLenght)->default_value("10"))(
+      "p,proxy", "Proxy List file (protocol://ip:port)",
+      cxxopts::value<string>(proxyFile));
 
   try {
     auto result = options.parse(argc, argv);
@@ -58,7 +61,7 @@ int main(int argc, char *argv[]) {
     domainLenght = domainLenght > 25 ? 25 : domainLenght;
     domainLenght = domainLenght < 5 ? 5 : domainLenght;
 
-    LicenseManager licenseManager(numLicenses, domainLenght);
+    LicenseManager licenseManager(numLicenses, domainLenght, proxyFile);
 
     licenseManager.generateLicenses();
 
