@@ -125,7 +125,8 @@ Options:
     -h, --help: Show help
     -v, --version: Show version
     -n, --number arg: Number of licenses (default: 1)
-    -l, --length arg: Domain length for temporal mails (default: 15)
+    -l, --length arg  Domain lenght for temporal mails (default: 10)
+    -p, --proxy arg   Proxy List file (protocol://ip:port)
 ```
 
 To extract licenses, run EsetKeysScrapper followed by any desired options. For example, to extract 3 licenses and use a domain length of 20 for temporal mails:
