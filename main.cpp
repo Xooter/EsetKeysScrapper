@@ -48,13 +48,13 @@ int main(int argc, char *argv[]) {
       return 0;
     }
 
-    cout << RED << "DISCLAIMER:" << endl
-         << "This tool is for educational purposes only. " << endl
+    cout << RED << "󰀦 DISCLAIMER:" << endl
+         << "󰀦 This tool is for educational purposes only. " << endl
          << "Use at your own risk. I am not responsible for any damage caused "
             "by the "
             "use of this tool."
          << RESET << endl;
-    cout << GREEN << "\tXooter." << RESET << endl << endl;
+    cout << GREEN << "\t Xooter." << RESET << endl << endl;
 
     numLicenses = numLicenses < 1 ? 1 : numLicenses;
 

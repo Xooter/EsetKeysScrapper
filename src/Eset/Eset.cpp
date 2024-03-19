@@ -77,7 +77,8 @@ bool Eset::ConfirmRegistration(string body) {
   this->code = curl_easy_perform(this->curl);
 
   if (this->response.find("We are sorry") != string::npos) {
-    cout << RED << " Verification Failed" << endl << "Retrying..." << endl;
+    cout << RED << " Verification Failed" << endl
+         << "󰑓 Retrying..." << endl;
     return false;
   }
 
