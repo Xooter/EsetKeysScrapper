@@ -95,16 +95,29 @@ To get started with EsetKeysScrapper, follow these steps:
 
 ### Installation
 
-- Clone the repository to your local machine:
-- `git clone https://github.com/Xooter/EsetKeysScrapper.git`
-- Navigate to the project directory:
-- `cd EsetKeysScrapper`
-- Create a build directory and navigate into it:
-- `mkdir build cd build`
-- Generate build files using CMake:
-- `cmake ..`
-- Build the project:
-- `cmake --build .`
+- Clone the repository to your local machine:  
+  `git clone https://github.com/Xooter/EsetKeysScrapper.git`
+- Navigate to the project directory:  
+  `cd EsetKeysScrapper`
+
+**You can either compile a binary locally:**
+
+- Create a build directory and navigate into it:  
+  ```sh
+  mkdir build
+  cd build
+  ```
+- Generate build files using CMake:  
+  `cmake ..`
+- Build the project:  
+  `cmake --build .`
+
+**or use a Docker image:**
+
+- Build an image:  
+  `docker build . -t esetkeysscrapper:latest`
+- Run a container:  
+  `docker run --rm esetkeysscrapper:latest /app/EsetKeys`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
