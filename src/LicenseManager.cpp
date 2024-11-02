@@ -1,4 +1,7 @@
 #include "LicenseManager.h"
+#if _WIN32 || _WIN64
+#include <windows.h>
+#endif
 
 LicenseManager::LicenseManager(int numLicenses, int domainLenght,
                                string proxyFile) {
@@ -126,4 +129,27 @@ void LicenseManager::showAllLicenses() {
     cout << GREEN << "󰌆 License: " << RESET << license.license << endl;
     cout << endl;
   }
+  copyLicenseToClipboard();
+}
+
+void LicenseManager::copyLicenseToClipboard() {
+  string text = licenses[0].license;
+#if _WIN32 || _WIN64
+  if (OpenClipboard(NULL)) {
+    EmptyClipboard();
+
+    HGLOBAL hGlobal = GlobalAlloc(GMEM_MOVEABLE, text.size() + 1);
+    if (hGlobal) {
+      memcpy(GlobalLock(hGlobal), text.c_str(), text.size() + 1);
+      GlobalUnlock(hGlobal);
+
+      SetClipboardData(CF_TEXT, hGlobal);
+    }
+
+    CloseClipboard();
+  }
+#else
+  std::string command = "echo \"" + text + "\" | wl-copy";
+  system(command.c_str());
+#endif
 }

@@ -1,7 +1,7 @@
 #include "dependencies/cxxopts.hpp"
 #include "src/LicenseManager.h"
 
-#define version "1.1"
+#define version "1.2"
 
 int main(int argc, char *argv[]) {
 
@@ -69,6 +69,9 @@ int main(int argc, char *argv[]) {
     cout << GREEN << "Licenses generated successfully" << RESET << endl << endl;
     licenseManager.showAllLicenses();
 
+#if _WIN32 || _WIN64
+    getchar();
+#endif
   } catch (const bad_exception &e) {
     cout << "Error parsing options: " << e.what() << std::endl;
     return 1;

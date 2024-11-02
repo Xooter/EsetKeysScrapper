@@ -29,4 +29,6 @@ private:
                          Message &message);
 
   void saveGeneratedData(const string &filename);
+
+  void copyLicenseToClipboard();
 };
