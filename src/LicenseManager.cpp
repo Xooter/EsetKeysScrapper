@@ -48,7 +48,7 @@ void LicenseManager::generateLicenses() {
       attempts_creating_account++;
     }
 
-    if (attempts_creating_account > 5) {
+    if (attempts_creating_account >= 5) {
       cout << RED << " Error creating account" << RESET << endl;
       continue;
     }

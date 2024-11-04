@@ -3,6 +3,24 @@
 
 #define version "1.2"
 
+#if _WIN32 || _WIN64
+#include <iostream>
+#include <windows.h>
+
+void enableANSIColors() {
+  HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+  if (hOut == INVALID_HANDLE_VALUE)
+    return;
+
+  DWORD dwMode = 0;
+  if (!GetConsoleMode(hOut, &dwMode))
+    return;
+
+  dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+  SetConsoleMode(hOut, dwMode);
+}
+#endif
+
 int main(int argc, char *argv[]) {
 
   cout << CYAN << R"(
@@ -36,6 +54,11 @@ int main(int argc, char *argv[]) {
       cxxopts::value<string>(proxyFile));
 
   try {
+
+#if _WIN32 || _WIN64
+    enableANSIColors();
+#endif
+
     auto result = options.parse(argc, argv);
 
     if (result.count("help")) {
