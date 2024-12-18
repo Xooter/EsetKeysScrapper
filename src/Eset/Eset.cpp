@@ -134,7 +134,7 @@ bool Eset::GetLicense() {
 
   this->code = curl_easy_perform(this->curl);
 
-  if (this->response.length() == 2) {
+  if (this->response.length() < 3) {
     cout << RED << " No license found" << endl;
     return false;
   }

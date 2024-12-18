@@ -22,11 +22,13 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     set(OPENSSL_ROOT_DIR "${CMAKE_SOURCE_DIR}/dependencies/windows-openssl") 
     set(OPENSSL_INCLUDE_DIR "${OPENSSL_ROOT_DIR}/include")
     set(OPENSSL_LIB_DIR "${OPENSSL_ROOT_DIR}/lib")
+
+    find_package(nlohmann_json REQUIRED)
     
     find_library(OPENSSL_LIBRARY NAMES openssl crypto libssl ssl libcrypto PATHS ${OPENSSL_LIB_DIR} NO_DEFAULT_PATH)
 
     target_include_directories(${PJ_NAME} PUBLIC ${CURL_INCLUDE_DIR} ${OPENSSL_INCLUDE_DIR})
-    target_link_libraries(${PJ_NAME} PRIVATE ${CURL_LIBRARY} ${OPENSSL_LIBRARY}  ws2_32 crypt32)
+    target_link_libraries(${PJ_NAME} PRIVATE ${CURL_LIBRARY} ${OPENSSL_LIBRARY} ws2_32 crypt32 nlohmann_json::nlohmann_json)
 
 else()
     find_package(nlohmann_json REQUIRED)
