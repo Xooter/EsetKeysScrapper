@@ -12,6 +12,7 @@ public:
   void generateLicenses();
 
   void showAllLicenses();
+  vector<Eset> getLicenses() { return licenses; }
 
 private:
   int numLicenses = 1;

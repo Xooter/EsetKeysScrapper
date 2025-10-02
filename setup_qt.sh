@@ -2,9 +2,9 @@
 set -e
 
 PROJECT_NAME=EsetKeys
-BUILD_DIR=build
+BUILD_DIR=build_qt
 
-echo "=== Build & Run Console version ==="
+echo "=== Build & Run Qt GUI version ==="
 
 rm -rf $BUILD_DIR
 mkdir -p $BUILD_DIR
@@ -13,5 +13,7 @@ cd $BUILD_DIR
 cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build . --config Release -- -j$(nproc)
 
-echo "Running Console executable..."
-./EsetKeysConsole "$@"
+export QT_QPA_PLATFORM=xcb
+
+echo "Running Qt GUI executable..."
+./EsetKeysQt
