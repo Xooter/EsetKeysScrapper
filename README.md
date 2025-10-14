@@ -102,11 +102,13 @@ To get started with EsetKeysScrapper, follow these steps:
 
 **You can either compile a binary locally:**
 
-- Create a build directory and navigate into it:  
+- Create a build directory and navigate into it:
+
   ```sh
   mkdir build
   cd build
   ```
+
 - Generate build files using CMake:  
   `cmake ..`
 - Build the project:  
@@ -178,6 +180,14 @@ Contributions to EsetKeysScrapper are welcome! Whether you want to report bugs, 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!-- WINDOWS DISCLAIMER -->
+
+## Windows Disclaimer
+
+I have an irrefutable hatred for Microsoft. Compiling anything on that dreadful operating system is unnecessarily overcomplicated, frustrating, and a complete mess. I only made a Windows version of this project because a lot of people requested it, but I **strongly recommend abandoning that OS entirely** and embracing systems that actually respect developers, like Linux or macOS. Your sanity will thank you.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 <!-- LICENSE -->
 
 ## License
@@ -194,7 +204,7 @@ By choosing the MIT License, we aim to encourage collaboration, innovation, and 
 
 ## Contact
 
-Joaquin Righetti - joaquinrighetti@gmail.com
+Joaquin Righetti - <joaquinrighetti@gmail.com>
 
 Project Link: [https://github.com/Xooter/EsetKeysScrapper](https://github.com/Xooter/EsetKeysScrapper)
 
