@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(EsetKeys VERSION 1.2 LANGUAGES CXX)
+project(EsetKeys VERSION 1.3 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -40,6 +40,7 @@ if(WIN32)
     target_compile_definitions(${PROJECT_NAME}Qt PRIVATE WITH_QT)
     target_link_libraries(${PROJECT_NAME}Qt PRIVATE
         Qt6::Widgets
+				Qt6::Core
         nlohmann_json::nlohmann_json
         OpenSSL::SSL
         CURL::libcurl
@@ -67,6 +68,7 @@ else()
     target_compile_definitions(${PROJECT_NAME}Qt PRIVATE WITH_QT)
     target_link_libraries(${PROJECT_NAME}Qt PRIVATE
         Qt6::Widgets
+				Qt6::Core
         nlohmann_json::nlohmann_json
         OpenSSL::SSL
         CURL::libcurl
