@@ -1,40 +1,84 @@
-cmake_minimum_required(VERSION 3.10)
-set(PJ_NAME EsetKeys)
-project(${PJ_NAME} VERSION 1.2)
+cmake_minimum_required(VERSION 3.16)
+
+project(EsetKeys VERSION 1.3 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
 file(GLOB_RECURSE SRC_FILES src/*.cpp)
-add_executable(${PJ_NAME} main.cpp ${SRC_FILES})
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++ -static")
+find_package(OpenSSL REQUIRED)
+find_package(nlohmann_json REQUIRED)
+find_package(CURL REQUIRED)
 
-    set(CURL_ROOT_DIR "${CMAKE_SOURCE_DIR}/dependencies/windows-curl") 
-    set(CURL_INCLUDE_DIR "${CURL_ROOT_DIR}/include")
-    set(CURL_LIB_DIR "${CURL_ROOT_DIR}/lib")
-    find_library(CURL_LIBRARY NAMES curl libcurl PATHS ${CURL_LIB_DIR} NO_DEFAULT_PATH)
-    if (NOT CURL_LIBRARY)
-        message(FATAL_ERROR "libcurl no encontrada en ${CURL_LIB_DIR}")
-    endif()
+# ================================
+# CONFIGURACIÓN WINDOWS
+# ================================
+if(WIN32)
+    message(STATUS "Compilando para Windows...")
 
-    set(OPENSSL_ROOT_DIR "${CMAKE_SOURCE_DIR}/dependencies/windows-openssl") 
-    set(OPENSSL_INCLUDE_DIR "${OPENSSL_ROOT_DIR}/include")
-    set(OPENSSL_LIB_DIR "${OPENSSL_ROOT_DIR}/lib")
+    set(VCPKG_TARGET_TRIPLET x64-mingw-dynamic)
+    include("C:/Users/Desktop/vcpkg/scripts/buildsystems/vcpkg.cmake")
+    # VCPKGS
+    # curl:x64-mingw-dynamic
+    # curl[ssl]:x64-mingw-dynamic
+    # curl[sspi]:x64-mingw-dynamic
+    # curl[tool]:x64-mingw-dynamic
+    # nlohmann-json:x64-mingw-dynamic
+    # qtbase:x64-mingw-dynamic
+    # qttools:x64-mingw-dynamic
 
-    find_package(nlohmann_json REQUIRED)
-    
-    find_library(OPENSSL_LIBRARY NAMES openssl crypto libssl ssl libcrypto PATHS ${OPENSSL_LIB_DIR} NO_DEFAULT_PATH)
+    set(CMAKE_C_COMPILER x86_64-w64-mingw32-gcc)
+    set(CMAKE_CXX_COMPILER x86_64-w64-mingw32-g++)
 
-    target_include_directories(${PJ_NAME} PUBLIC ${CURL_INCLUDE_DIR} ${OPENSSL_INCLUDE_DIR})
-    target_link_libraries(${PJ_NAME} PRIVATE ${CURL_LIBRARY} ${OPENSSL_LIBRARY} ws2_32 crypt32 nlohmann_json::nlohmann_json)
+    add_executable(${PROJECT_NAME}Console main.cpp ${SRC_FILES})
+    target_link_libraries(${PROJECT_NAME}Console PRIVATE
+        nlohmann_json::nlohmann_json
+        OpenSSL::SSL
+        CURL::libcurl
+    )
 
+    find_package(Qt6 REQUIRED COMPONENTS Widgets)
+    set(CMAKE_AUTOMOC ON)
+    set(CMAKE_AUTOUIC ON)
+    set(CMAKE_AUTORCC ON)
+
+    add_executable(${PROJECT_NAME}Qt WIN32 main_qt.cpp ${SRC_FILES})
+    target_compile_definitions(${PROJECT_NAME}Qt PRIVATE WITH_QT)
+    target_link_libraries(${PROJECT_NAME}Qt PRIVATE
+        Qt6::Widgets
+				Qt6::Core
+        nlohmann_json::nlohmann_json
+        OpenSSL::SSL
+        CURL::libcurl
+    )
+
+# ================================
+# CONFIGURACIÓN LINUX
+# ================================
 else()
-    find_package(nlohmann_json REQUIRED)
-    find_package(OpenSSL REQUIRED)
-    find_package(CURL REQUIRED)
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
-    include_directories(${nlohmann_json_INCLUDE_DIRS})
-    target_link_libraries(${PJ_NAME} PRIVATE curl nlohmann_json::nlohmann_json OpenSSL::SSL)
+    message(STATUS "Compilando para Linux...")
+
+    add_executable(${PROJECT_NAME}Console main.cpp ${SRC_FILES})
+    target_link_libraries(${PROJECT_NAME}Console PRIVATE
+        nlohmann_json::nlohmann_json
+        OpenSSL::SSL
+        CURL::libcurl
+    )
+
+    find_package(Qt6 REQUIRED COMPONENTS Widgets)
+    set(CMAKE_AUTOMOC ON)
+    set(CMAKE_AUTOUIC ON)
+    set(CMAKE_AUTORCC ON)
+
+    add_executable(${PROJECT_NAME}Qt main_qt.cpp ${SRC_FILES})
+    target_compile_definitions(${PROJECT_NAME}Qt PRIVATE WITH_QT)
+    target_link_libraries(${PROJECT_NAME}Qt PRIVATE
+        Qt6::Widgets
+				Qt6::Core
+        nlohmann_json::nlohmann_json
+        OpenSSL::SSL
+        CURL::libcurl
+    )
 endif()

@@ -1,7 +1,7 @@
 #include "dependencies/cxxopts.hpp"
 #include "src/LicenseManager.h"
 
-#define version "1.2"
+#define version "1.3"
 
 #if _WIN32 || _WIN64
 #include <iostream>

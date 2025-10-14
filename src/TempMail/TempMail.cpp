@@ -6,6 +6,9 @@ TempMail::TempMail(int mailLenght) : Scrapper() {
   this->mailLenght = mailLenght;
 
   this->getNewEmail();
+
+  curl_easy_setopt(this->curl, CURLOPT_SSL_VERIFYPEER, 0L);
+  curl_easy_setopt(this->curl, CURLOPT_SSL_VERIFYHOST, 0L);
 }
 
 TempMail::~TempMail() {}

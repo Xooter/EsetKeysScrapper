@@ -7,6 +7,8 @@ Scrapper::Scrapper() {
     throw " Error al inicializar CURL";
   }
 
+  curl_easy_setopt(this->curl, CURLOPT_SSL_VERIFYPEER, 0L);
+  curl_easy_setopt(this->curl, CURLOPT_SSL_VERIFYHOST, 0L);
   curl_easy_setopt(this->curl, CURLOPT_WRITEDATA, &this->response);
   curl_easy_setopt(this->curl, CURLOPT_WRITEFUNCTION, WriteCallback);
 
@@ -40,6 +42,10 @@ std::string Scrapper::pickUserAgent() {
 }
 
 void Scrapper::setHeaders() {
+  if (!this->curl) {
+     std::cerr << "[ERROR] curl handle is null!" << std::endl;
+     return;
+  }
   headers = curl_slist_append(headers, this->pickUserAgent().c_str());
 
   if (this->token != "") {
