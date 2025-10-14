@@ -1,3 +1,6 @@
+# cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=C:\Users\Desktop\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-mingw-dynamic
+# cmake --build build --config Release
+
 cmake_minimum_required(VERSION 3.16)
 
 set(PJ_NAME EsetKeys)
@@ -7,10 +10,20 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+set(CMAKE_SYSTEM_NAME Windows)
+set(CMAKE_SYSTEM_PROCESSOR x86_64)
+
+set(CMAKE_C_COMPILER x86_64-w64-mingw32-gcc)
+set(CMAKE_CXX_COMPILER x86_64-w64-mingw32-g++)
+
+set(VCPKG_TARGET_TRIPLET x64-mingw-dynamic)
+set(MINGW TRUE)
+include("C:/Users/Desktop/vcpkg/scripts/buildsystems/vcpkg.cmake")
+
 file(GLOB_RECURSE SRC_FILES src/*.cpp)
 
-find_package(nlohmann_json REQUIRED)
 find_package(OpenSSL REQUIRED)
+find_package(nlohmann_json REQUIRED)
 find_package(CURL REQUIRED)
 
 add_executable(${PJ_NAME}Console main.cpp ${SRC_FILES})
@@ -33,32 +46,3 @@ target_link_libraries(${PJ_NAME}Qt PRIVATE
     OpenSSL::SSL
     CURL::libcurl
 )
-
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++ -static")
-
-    set(CURL_ROOT_DIR "${CMAKE_SOURCE_DIR}/dependencies/windows-curl") 
-    set(CURL_INCLUDE_DIR "${CURL_ROOT_DIR}/include")
-    set(CURL_LIB_DIR "${CURL_ROOT_DIR}/lib")
-    find_library(CURL_LIBRARY NAMES curl libcurl PATHS ${CURL_LIB_DIR} NO_DEFAULT_PATH)
-    if (NOT CURL_LIBRARY)
-        message(FATAL_ERROR "libcurl no encontrada en ${CURL_LIB_DIR}")
-    endif()
-
-    set(OPENSSL_ROOT_DIR "${CMAKE_SOURCE_DIR}/dependencies/windows-openssl") 
-    set(OPENSSL_INCLUDE_DIR "${OPENSSL_ROOT_DIR}/include")
-    set(OPENSSL_LIB_DIR "${OPENSSL_ROOT_DIR}/lib")
-    find_library(OPENSSL_LIBRARY NAMES openssl crypto libssl ssl libcrypto PATHS ${OPENSSL_LIB_DIR} NO_DEFAULT_PATH)
-    if (NOT OPENSSL_LIBRARY)
-        message(FATAL_ERROR "OpenSSL no encontrada en ${OPENSSL_LIB_DIR}")
-    endif()
-
-    target_include_directories(${PJ_NAME}Console PUBLIC ${CURL_INCLUDE_DIR} ${OPENSSL_INCLUDE_DIR})
-    target_link_libraries(${PJ_NAME}Console PRIVATE
-        ${CURL_LIBRARY}
-        ${OPENSSL_LIBRARY}
-        ws2_32
-        crypt32
-        nlohmann_json::nlohmann_json
-    )
-endif()

@@ -14,6 +14,8 @@ Eset::Eset(string mail, Proxy *proxy) : Scrapper() {
          << GREEN << "Using Proxy: " << YELLOW << proxy->toString() << RESET
          << endl;
 
+    curl_easy_setopt(this->curl, CURLOPT_SSL_VERIFYPEER, 0L);
+    curl_easy_setopt(this->curl, CURLOPT_SSL_VERIFYHOST, 0L);
     curl_easy_setopt(this->curl, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
     if (proxy->protocol == "socks5") {
       curl_easy_setopt(this->curl, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
@@ -50,7 +52,8 @@ bool Eset::CreateAccount() {
   curl_easy_setopt(this->curl, CURLOPT_POSTFIELDS, jsonBody.c_str());
 
   this->code = curl_easy_perform(this->curl);
-
+  cout << this->code << endl;
+  std::cout << curl_version() << std::endl;
   if (this->code == CURLE_OK && !this->response.empty()) {
     cout << endl
          << YELLOW << "--- ESSET ACCOUNT CREATED ---" << endl
@@ -324,7 +327,7 @@ void Eset::setHeaders(bool create_account, bool hasLenght) {
   headers =
       curl_slist_append(headers, "Accept: application/json, text/plain, */*");
   headers = curl_slist_append(headers, "Accept-Language: en-US,en;q=0.5");
-  headers = curl_slist_append(headers, "Accept-Encoding: gzip, deflate, br");
+  headers = curl_slist_append(headers, "Accept-Encoding: gzip, deflate");
   headers = curl_slist_append(headers, "X-Security-Request: required");
   headers = curl_slist_append(headers, "Content-Type: application/json");
   headers = curl_slist_append(headers, "Origin: https://login.eset.com");
