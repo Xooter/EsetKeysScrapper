@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
 
   QWidget window;
   window.setWindowTitle("EsetKeysScrapper");
-  window.setFixedSize(520, 400);
+  window.setFixedSize(520, 450);
   window.setAttribute(Qt::WA_TranslucentBackground);
 
   app.setStyleSheet(R"(

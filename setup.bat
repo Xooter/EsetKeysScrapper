@@ -16,7 +16,6 @@ if not exist %BUILD_DIR% mkdir %BUILD_DIR%
 cd %BUILD_DIR%
 
 echo -- Limpiando build anterior --
-del /s /q * >nul 2>&1
 
 cmake -S .. -B . ^
   -G "MinGW Makefiles" ^
