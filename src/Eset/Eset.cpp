@@ -52,8 +52,7 @@ bool Eset::CreateAccount() {
   curl_easy_setopt(this->curl, CURLOPT_POSTFIELDS, jsonBody.c_str());
 
   this->code = curl_easy_perform(this->curl);
-  cout << this->code << endl;
-  std::cout << curl_version() << std::endl;
+
   if (this->code == CURLE_OK && !this->response.empty()) {
     cout << endl
          << YELLOW << "--- ESSET ACCOUNT CREATED ---" << endl

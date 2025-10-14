@@ -4,14 +4,19 @@ set -e
 PROJECT_NAME=EsetKeys
 BUILD_DIR=build
 
-echo "=== Build & Run Console version ==="
+echo "==============================="
+echo " Compilando proyecto $PROJECT_NAME para Linux"
+echo "==============================="
 
-rm -rf $BUILD_DIR
-mkdir -p $BUILD_DIR
-cd $BUILD_DIR
+rm -rf "$BUILD_DIR"
+mkdir -p "$BUILD_DIR"
+cd "$BUILD_DIR"
 
 cmake .. -DCMAKE_BUILD_TYPE=Release
-cmake --build . --config Release -- -j$(nproc)
+cmake --build . --config Release -- -j"$(nproc)"
 
-echo "Running Console executable..."
-./EsetKeysConsole "$@"
+cd ..
+echo "-------------------------------"
+echo "✅ Compilación finalizada correctamente"
+echo "📁 Binarios generados en: $BUILD_DIR"
+echo "-------------------------------"
