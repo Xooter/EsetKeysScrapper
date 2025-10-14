@@ -20,6 +20,14 @@ if(WIN32)
 
     set(VCPKG_TARGET_TRIPLET x64-mingw-dynamic)
     include("C:/Users/Desktop/vcpkg/scripts/buildsystems/vcpkg.cmake")
+    # VCPKGS
+    # curl:x64-mingw-dynamic
+    # curl[ssl]:x64-mingw-dynamic
+    # curl[sspi]:x64-mingw-dynamic
+    # curl[tool]:x64-mingw-dynamic
+    # nlohmann-json:x64-mingw-dynamic
+    # qtbase:x64-mingw-dynamic
+    # qttools:x64-mingw-dynamic
 
     set(CMAKE_C_COMPILER x86_64-w64-mingw32-gcc)
     set(CMAKE_CXX_COMPILER x86_64-w64-mingw32-g++)
