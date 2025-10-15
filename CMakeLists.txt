@@ -18,8 +18,9 @@ find_package(CURL REQUIRED)
 if(WIN32)
     message(STATUS "Compilando para Windows...")
 
-    set(VCPKG_TARGET_TRIPLET x64-mingw-dynamic)
+    set(VCPKG_TARGET_TRIPLET x64-mingw-static)
     include("C:/Users/Desktop/vcpkg/scripts/buildsystems/vcpkg.cmake")
+
     # VCPKGS
     # curl:x64-mingw-dynamic
     # curl[ssl]:x64-mingw-dynamic
@@ -28,7 +29,14 @@ if(WIN32)
     # nlohmann-json:x64-mingw-dynamic
     # qtbase:x64-mingw-dynamic
     # qttools:x64-mingw-dynamic
+		#
+		# vcpkg install curl:x64-mingw-static
+	  # vcpkg install nlohmann-json:x64-mingw-static
+	  # vcpkg install qtbase:x64-mingw-static
+	  # vcpkg install qttools:x64-mingw-static
+	  # vcpkg install openssl:x64-mingw-static
 
+		set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
     set(CMAKE_C_COMPILER x86_64-w64-mingw32-gcc)
     set(CMAKE_CXX_COMPILER x86_64-w64-mingw32-g++)
 
