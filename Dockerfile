@@ -12,5 +12,6 @@ RUN apt update \
     && cd source/build \
     && cmake .. \
     && cmake --build . \
-    && mv EsetKeys /app \
+    && mv EsetKeysQt /app \
     && rm -r /app/source
+    
