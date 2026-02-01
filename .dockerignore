@@ -1,0 +1,39 @@
+# Build directories
+build/
+build-*/
+bin/
+*.o
+*.a
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+!README.md
+docs/
+
+# Scripts (no necesarios en container)
+*.sh
+
+# Temporales
+*.tmp
+*.log
+
+# Windows específicos
+*.exe
+*.dll
+
+# Qt build files
+*.qm
+moc_*
+ui_*
+qrc_*

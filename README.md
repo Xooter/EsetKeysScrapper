@@ -119,7 +119,7 @@ To get started with EsetKeysScrapper, follow these steps:
 - Build an image:  
   `docker build . -t esetkeysscrapper:latest`
 - Run a container:  
-  `docker run --rm esetkeysscrapper:latest /app/EsetKeys`
+  `docker run --rm esetkeysscrapper:latest`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
