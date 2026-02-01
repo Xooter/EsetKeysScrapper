@@ -13,7 +13,7 @@ inline const string CREATE_ACCOUNT =
 inline const string LOGIN_ACCOUNT = "https://login.eset.com/api/Account/Login";
 inline const string TOKEN = "https://login.eset.com/connect/token";
 inline const string ACTIVATE_lICENSE =
-    "https://home.eset.com/api/License/ProtectDevice";
+    "https://home.eset.com/api/License/ActivateTrialLicense";
 inline const string GET_All = "https://home.eset.com/api/License/GetAll";
 
 class Eset : public Scrapper {

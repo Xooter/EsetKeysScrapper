@@ -161,23 +161,26 @@ bool Eset::activateLicense() {
 
   headers = curl_slist_append(headers, "Host: home.eset.com");
   headers = curl_slist_append(headers, "Content-type: application/json");
+  headers = curl_slist_append(headers, "Accept: */*");
+  headers = curl_slist_append(headers, "x-eset-client-type: browser_desktop");
+  headers = curl_slist_append(headers, "x-eset-client-device-language: en-US");
   headers = curl_slist_append(
-      headers, "Referer: https://home.eset.com/protect/installer");
+      headers, "Referer: https://home.eset.com/onboarding/trial-subscription");
   string tokenHeader = "Authorization: Bearer " + this->token;
   headers = curl_slist_append(headers, tokenHeader.c_str());
 
+  curl_easy_setopt(this->curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS);
   curl_easy_setopt(this->curl, CURLOPT_HTTPHEADER, headers);
 
   curl_easy_setopt(this->curl, CURLOPT_URL, ACTIVATE_lICENSE.c_str());
   curl_easy_setopt(this->curl, CURLOPT_POST, 1L);
 
-  const string activateData =
-      "{\"operatingSystem\":9,\"sendEmail\":false,\"emailAddress\":\"" +
-      this->mail + "\",\"freemiumType\":1}";
+  const string activateData = "{\"productCode\":\"148\"}";
 
   curl_easy_setopt(this->curl, CURLOPT_POSTFIELDS, activateData.c_str());
 
   this->code = curl_easy_perform(this->curl);
+  cout << this->response << endl;
 
   if (this->code == CURLE_OK && this->response.find("!DOCTYPE") == string::npos)
     return true;
